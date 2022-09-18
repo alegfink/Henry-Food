@@ -1,0 +1,6 @@
+crear carpetas a usar (actions, components, reducer, store)
+Crear el index de store
+agregarle provider y store al index
+importar datos necesarios en app.js y poner browser
+crear components (ej landing)
+generar actions (rutas)
