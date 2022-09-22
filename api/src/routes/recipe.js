@@ -15,7 +15,23 @@ router.get('/', async(req,res)=>{
             title:{
                 [Op.iLike]: `%${name}%`
                 }
-            }
+            },
+            include: [
+                {
+                 model:Diet,
+                 attributes:['name'],
+                 through:{
+                    attributes:[],
+                 }
+                },
+                {
+                model:DishType,
+                attributes:['name'],
+                 through:{
+                    attributes:[],
+                 }
+                }
+            ]
         })
         contain.length>0? res.status(202).json(contain) : res.status(404).json('no se encontro receta con ese nombre')
     }catch(err){
@@ -52,7 +68,7 @@ router.get('/all', async(req, res)=>{
                 }
             ]
         });
-        console.log(allRecet)
+        // console.log(allRecet)
         allRecet && res.status(202).json(allRecet)
     }catch(err){
         res.status(404).json('error en el all')
@@ -122,7 +138,7 @@ router.get('/:id', async (req,res)=>{
 
 let index = 0;
 router.post('/asd', async(req,res)=>{
-    const {title, summary, healthScore, steps, diets, id} = req.body
+    const {title, summary, healthScore, steps, diets, image, id} = req.body
     try{
         // aca genero un index porque desde el formulario no me mandan ninguno
         index++
@@ -133,12 +149,14 @@ router.post('/asd', async(req,res)=>{
             // console.log (exist)
             exist? index++ : x++
         }
-                
+        // console.log('REQ BODY', req.body)
+        const titulo = title[0].toUpperCase()+title.slice(1)          
         const receta = await Recipe.create({
-            title,
+            title: titulo,
             summary,
             healthScore,
             steps,
+            image,
             id: index
         })
         // const dieta = await Diet.findAll({

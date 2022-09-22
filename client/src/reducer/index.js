@@ -1,4 +1,4 @@
-const { POST_INIT_RECIPES, GET_ALL_RECIPES, GET_RECIPE_DETAIL, DELETE_DETAIL, FILTER_BY_DIET, DELETE_FILTER, ORDER_BY_NAME, SEARCH_BY_NAME } = require("../actions");
+const { POST_INIT_RECIPES, GET_ALL_RECIPES, GET_RECIPE_DETAIL, DELETE_DETAIL, FILTER_BY_DIET, DELETE_FILTER, SAVE_PAGE, ORDER_BY_NAME, SEARCH_BY_NAME, POST_NEW_RECIPE, GET_ALL_DIETS, ORDER_BY_HEALTHSCORE } = require("../actions");
 
 
 const initialState = {
@@ -6,9 +6,10 @@ const initialState = {
     recipes : [],
     recipeDetail: {},
     dietFiltered: [],
-    // se crea una variable para que el filtrado de dietas no se haga sobre la que trae la pagina
     allRecipes: [],
     recipesSearch:[],
+    allDiets:[],
+    recordedPage:[],
 
 }
 
@@ -38,10 +39,10 @@ function rootReducer (state = initialState, action){
                 recipeDetail:{}
             }
         case FILTER_BY_DIET:
-            const allRecipes = state.allRecipes
+            const allRecipe = state.allRecipes
             console.log('ACTION',action.payload)
-            console.log('ALLRECIP', allRecipes)
-            let dietFiltered = action.payload === 'All'? allRecipes : allRecipes.filter(el=>{
+            console.log('ALLRECIP', allRecipe)
+            let dietFiltered = action.payload === 'All'? allRecipe : allRecipe.filter(el=>{
                 const asd = el.diets.filter(el=>el.name===action.payload)
                 if(asd.length>0){
                     return true
@@ -84,15 +85,49 @@ function rootReducer (state = initialState, action){
                     if (b.title>a.title) return 1
                     return 0
                 })
+                console.log('SOY EL ARRAY',arrayOrd)
             return{
                 ...state,
                 recipes: arrayOrd
+            }
+        case ORDER_BY_HEALTHSCORE:
+            let arrayLowHigh = action.payload === 'low'?
+                state.recipes.sort((a,b)=>{
+                    if (a.healthScore>b.healthScore) return 1
+                    if (b.healthScore>a.healthScore) return -1 
+                    return 0       
+                }):
+                state.recipes.sort((a,b)=>{
+                    if (a.healthScore>b.healthScore) return -1
+                    if (b.healthScore>a.healthScore) return 1 
+                    return 0 
+                })
+            return{
+                ...state,
+                recipes: arrayLowHigh
             }
         case SEARCH_BY_NAME:
             return{
                 ...state,
                 recipesSearch: action.payload,
                 recipes: action.payload
+            }
+        case POST_NEW_RECIPE:
+            // console.log('SOY EL REDUCER', action.payload)
+            return{
+                ...state
+            }
+        case GET_ALL_DIETS:
+            
+            return{
+                ...state,
+                allDiets: action.payload
+            }
+        case SAVE_PAGE:
+            console.log('ENTRA AL SAVE')
+            return{
+                ...state,
+                recordedPage: action.payload
             }
         default:
             return state;

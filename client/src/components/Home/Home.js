@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {Link} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllRecipes, postInitRecipes, filterRecipsByDiet, deleteFilter, orderByName,searchByName } from '../../actions';
+import { getAllRecipes, postInitRecipes, filterRecipsByDiet, savePage, deleteFilter, orderByName,searchByName, orderByHealthScore } from '../../actions';
 import Card from '../Card/Cards.js';
-import Paginado from '../Paginado/Paginado';
+import NavBar from '../NavBar/NavBar.js';
+import Paginado from '../Paginado/Paginado.js';
+import SearchBar from '../SearchBar/SearchBar.js';
+import FilterBar from '../FilterBar/FilterBar.js';
+import s from './Home.module.css'
 
 // Ruta principal: debe contener
 
@@ -19,41 +23,56 @@ import Paginado from '../Paginado/Paginado';
 export default function Home(){
 
     const dispatch = useDispatch()
-    
-    const allRecipes = useSelector (state=>state?.recipes)
+    const gif = 'https://media2.giphy.com/media/HeMju6ptLhZ7XCA4vH/giphy.gif?cid=790b7611adf768434dfa5bd572ec4332d478fca69a7bf862&rid=giphy.gif&ct=s'
+    let allRecipes = useSelector (state=>state?.recipes)
     const titleSearch = useSelector (state=>state?.recipesSearch)
-    const [order, setOrder] = useState('')
-
+    let [order, setOrder] = useState('')
+    const [loadingg, setLoadingg] = useState(false)
     //para intentar resetear el filtro cuando se actualiza
     const filter = useSelector(state=>state?.deleteFilter)
+    const actualPage = useSelector(state=>state.recordedPage)
+    let [currentPage, setCurrentPage] = useState(1)
 
     useEffect(()=>{
         dispatch(getAllRecipes());
+        setTimeout( ()=>{
+            setLoadingg(true) 
+        }, 1000)
+        
+        actualPage && setCurrentPage(actualPage)
         return()=>{
+            dispatch(savePage(currentPage))
             dispatch(deleteFilter())//para resetear el filtro cuando actualiza
+           
         }
-    },[dispatch, filter]) //para reseterar el filtro cuando actualiza
+    },[dispatch]) //para reseterar el filtro cuando actualiza
 
     // const handleRecharge = (e) => {
     //     e.preventDefault()
     //     dispatch(getAllRecipes()) 
     // }
 
-    const [currentPage, setCurrentPage] = useState(1)
+    
     const [recipesPerPage, setRecipesPerPage] = useState(9)
     const indexOfLastRecipe = currentPage * recipesPerPage
     const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage
     const currentRecipes = allRecipes?.slice(indexOfFirstRecipe, indexOfLastRecipe)
     const [title, setTitile] = useState('')
 
+    const [loading, setLoading] = useState(true);
+    const [maxPageNumberLimit, setmaxPageNumberLimit]= useState(4);
+    const [minPageNumberLimit, setminPageNumberLimit]= useState(0);
 
     const paginado = (pageNumber) =>{
         setCurrentPage(pageNumber)
     }
 
-    function handleFilterDiet(e){
+    const handleFilterDiet=(e)=>{
         e.preventDefault()
         dispatch(filterRecipsByDiet(e.target.value))
+        setmaxPageNumberLimit(4)
+        setminPageNumberLimit(0)
+        setCurrentPage(1)
     }
 
     function handleOrderByName(e){
@@ -61,14 +80,42 @@ export default function Home(){
         dispatch(orderByName(e.target.value))
         setCurrentPage(1)
         setOrder(`Ordenado: ${e.target.value}`)
-
+        setmaxPageNumberLimit(4)
+        setminPageNumberLimit(0)
     }
 
-    function handleInput(e){
+    function handleOrderByHealthScore(e){
         e.preventDefault()
-        setTitile(e.target.value)
-        dispatch(searchByName(title))
+        dispatch(orderByHealthScore(e.target.value))
+        setCurrentPage(1)
+        setOrder(`Ordenado: ${e.target.value}`)
+        setmaxPageNumberLimit(4)
+        setminPageNumberLimit(0)
+
     }
+
+    // function handleInput(e){
+    //     e.preventDefault()
+    //     setTitile(e.target.value)
+    //     dispatch(searchByName(title))
+    // }
+
+    // function handlePrevBut() {
+    //     setCurrentPage(currentPage-1)
+
+    // }
+
+    // function handleNextBut() {
+    //     setCurrentPage(currentPage+1)
+        
+
+    // }
+
+    // function handleInput(e){
+    //     e.preventDefault()
+    //     setTitile(e.target.value)
+    //     dispatch(searchByName(title))
+    // }
 
     // function handleSearch(e){
     //     e.preventDefault()
@@ -83,9 +130,44 @@ export default function Home(){
         
     // }
 
+    // const pageNumber = []
+    // for(let i=1; i<=Math.ceil( allRecipes / recipesPerPage ); i++){
+    //     pageNumber.push(i)
+    // }
+
+    
+
+    function handlePrevBut() {
+        setCurrentPage(currentPage-1)
+        setminPageNumberLimit(minPageNumberLimit-1)
+        setmaxPageNumberLimit(maxPageNumberLimit-1)
+        console.log ('CURRENT PAGE1', currentPage)
+
+    }
+
+    function handleNextBut() {
+        setCurrentPage(currentPage+1)
+        setmaxPageNumberLimit(maxPageNumberLimit+1)
+        setminPageNumberLimit(minPageNumberLimit+1)
+        console.log ('CURRENT PAGE2', currentPage)
+
+    }
+
+    
+    // function handleInput(e){
+    //     e.preventDefault()
+    //     setCurrentPage(1)   
+    //     setTitile(e.target.value)
+    //     dispatch(searchByName(title))
+        
+    // }
+
     return (
         <div>
-            <h1>Home</h1>
+            <div>
+                <NavBar/>
+            </div>
+            {/* <h1>Home</h1> */}
             {/* <div>
                 <label>Receta:</label>
                 <input type="text" id="title" />
@@ -93,21 +175,36 @@ export default function Home(){
                 <button>Buscar</button>
                 </Link>
             </div> */}
-            <Link to = '/detail'>
+            {/* <Link to = '/detail'>
                 Ingresar
-            </Link>
+            </Link> */}
             {/* <button  onClick={(e)=> handleRecharge()}>Recargar</button> */}
-            <div>
+            {/* <div>
                 <label htmlFor='title'>Busqueda</label>
                 <input type='text' id='title' autoComplete='off' value={title} placeholder= "Search Recipe" onChange={e=>handleInput(e)}></input>
-                {/* <button onClick={(e)=>handleSearch(e)}>Buscar</button> */}
+                <button onClick={(e)=>handleSearch(e)}>Buscar</button>
+            </div> */}
+            <div>
+                <SearchBar
+                // handleInput={handleInput}
+                // title={title}
+                setCurrentPage={setCurrentPage}
+                setminPageNumberLimit={setminPageNumberLimit}
+                setmaxPageNumberLimit={setmaxPageNumberLimit}
+
+                />
             </div>
             <div>
-            <select onChange={e=>handleOrderByName(e)}>
+                <FilterBar
+                handleFilterDiet={handleFilterDiet}
+                handleOrderByHealthScore={handleOrderByHealthScore}
+                handleOrderByName={handleOrderByName}
+                />
+            {/* <select onChange={e=>handleOrderByName(e)}>
                     <option value='asc'>(a-z) Ascendent</option>
                     <option value='desc'>(z-a) Descendent</option>
                 </select>
-                <select>
+                <select onChange={e=>handleOrderByHealthScore(e)}>
                     <option value='low'>Lower</option>
                     <option value='hi'>Higher</option>
                 </select>
@@ -123,25 +220,56 @@ export default function Home(){
                     <option value='pescatarian'>pescatarian</option>
                     <option value='ketogenic'>ketogenic</option>
                     <option value='fodmap friendly'>fodmap friendly</option>
-                </select>
+                </select> */}
                 {/* {console.log("ALL RECIPES",allRecipes)} */}
+            </div>
+            {
+                !loadingg?(
+                    <div className={s.loadingg}>
+                        <img  src={gif}/>
+                    </div>
+                    
+                )
+                :
+                <div>
             {allRecipes &&
             <Paginado
             recipesPerPage = {recipesPerPage}
             allRecipes = {allRecipes.length}
-            paginado = {paginado}/>
+            currentPage = {currentPage}
+            setCurrentPage = {setCurrentPage}
+            
+            paginado = {paginado}
+            // pageNumber={pageNumber}
+            maxPageNumberLimit={maxPageNumberLimit}
+            minPageNumberLimit={minPageNumberLimit}
+            handlePrevBut = {handlePrevBut}
+            handleNextBut = {handleNextBut}
+            />
+            
             }
             
+            <div className={s.containerCard}>
             
             {   
-            // title===''?
+                // loading?(
+                //     <div>
+                //         <span>cargando</span>
+                //         {
+                //             setTimeout(() => {
+                //                 setLoading(false);
+                //               }, 3000)
+                //         }
+                //     </div>
+                // )
+                // :
                 currentRecipes && currentRecipes.map(el=>{
-                    // console.log('BUSQUEDA', currentRecipes)
+                    // console.log('SOY RECIPESs',currentRecipes)
                     return(
                         <div>
                             {/* {console.log('ELEMENTO', el)} */}
                             <Link key={el.id} to={`/detail/${el.id}`}>
-                                <Card title={el.title} image={el.image} diets={el.diets} key={el.id}/>
+                                <Card title={el.title} image={el.image} diets={el.diets} healthScore={el.healthScore} key={el.id}/>
                             </Link>
                             
                         </div>
@@ -167,6 +295,10 @@ export default function Home(){
                 // })
             }
             </div>
+            
+            </div>
+            }
+            
         </div>
     )
 }

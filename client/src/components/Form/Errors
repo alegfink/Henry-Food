@@ -1,0 +1,30 @@
+import moduleTransformations from "@babel/preset-env/lib/module-transformations";
+
+function validate(input) {
+  let errors = {};
+  if (!input.title) {
+    errors.title = 'Title is required';
+  } else if (!/\S+@\S+\.\S+/.test(input.title)) {
+    errors.title = 'Title is invalid';
+  }
+  if (!input.summary) {
+    errors.summary = 'Summary is required';
+  } else if (!/\d/.test(input.password)) {
+    errors.summary = 'Summary is invalid';
+  }
+  if (!input.healtScore) {
+    errors.healtScore = 'HealtScore is required';
+  } else if (!/\S+@\S+\.\S+/.test(input.title)) {
+    errors.healtScore = 'HealtScore is invalid';
+  }
+  if (!input.steps) {
+    errors.steps = 'Steps is required';
+  } else if (!/\S+@\S+\.\S+/.test(input.title)) {
+    errors.steps = 'Steps is invalid';
+  }
+  return errors;
+};
+
+module.exports={
+    validate
+}

@@ -19,7 +19,7 @@ const postApiInfo = async ()=>{
             return s.number.toString()+' '+s.step
         })
         
-        asd = stepss?.join('/n')
+        asd = stepss?.join('<br />')
         console.log(asd)
         
         // let stepss = ''

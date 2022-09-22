@@ -7,6 +7,10 @@ export const FILTER_BY_DIET = 'FILTER_BY_DIET';
 export const DELETE_FILTER = 'DELETE_FILTER';
 export const ORDER_BY_NAME = 'ORDER_BY_NAME';
 export const SEARCH_BY_NAME = 'SEARCH_BY_NAME';
+export const POST_NEW_RECIPE = 'POST_NEW_RECIPE';
+export const GET_ALL_DIETS = 'GET_ALL_DIETS';
+export const ORDER_BY_HEALTHSCORE = 'ORDER_BY_HEALTHSCORE';
+export const SAVE_PAGE = 'SAVE_PAGE';
 
 //aca armo la ruta
 
@@ -19,7 +23,13 @@ export function postInitRecipes () {
             type: POST_INIT_RECIPES, 
             payload: json.data,
         });
-        });
+        })
+        .catch(err=>{
+          dispatch({ 
+            type: POST_INIT_RECIPES, 
+            payload: err.data,
+        })
+        })
     };
   };
 
@@ -31,6 +41,12 @@ export function getAllRecipes (){
           type: GET_ALL_RECIPES,
           payload: json.data
         })
+      })
+      .catch(err=>{
+        dispatch({ 
+          type: GET_ALL_RECIPES, 
+          payload: err.data,
+      })
       })
   }
 }
@@ -50,6 +66,12 @@ export function getRecipeDetail (id){
           type: GET_RECIPE_DETAIL,
           payload: json.data
         })
+      })
+      .catch(err=>{
+        dispatch({ 
+          type: GET_RECIPE_DETAIL, 
+          payload: err.data,
+      })
       })
   }
 }
@@ -74,6 +96,13 @@ export function orderByName(payload){
   }
 }
 
+export function orderByHealthScore(payload){
+  return{
+    type: ORDER_BY_HEALTHSCORE,
+    payload
+  }
+}
+
 export function searchByName(payload){
   return function(dispatch) {
     return axios.get(`http://localhost:3001/recipe?name=${payload}`)
@@ -90,4 +119,47 @@ export function searchByName(payload){
           })
         })
       }
+}
+
+export function postNewRecipe (payload){
+  return function (dispatch){
+    return axios.post('http://localhost:3001/recipe/asd', payload)
+      .then((json)=>{
+        dispatch({                 // o return json
+          type: POST_NEW_RECIPE,
+          payload:json.data
+        })}
+      )
+      .catch(err=>{
+        dispatch({ 
+          type: POST_NEW_RECIPE, 
+          payload: err.data,
+      })
+      })
+  } 
+}
+
+export function getAllDiets(){
+  return function (dispatch){
+    return axios.get('http://localhost:3001/diet')
+      .then(json=>{
+        dispatch({
+          type: GET_ALL_DIETS,
+          payload: json.data
+        })
+      })
+      .catch(err=>{
+        dispatch({ 
+          type: GET_ALL_DIETS, 
+          payload: err.data,
+      })
+      })
+  }
+}
+
+export function savePage(payload){
+  return{
+    type: SAVE_PAGE,
+    payload
+  }
 }
