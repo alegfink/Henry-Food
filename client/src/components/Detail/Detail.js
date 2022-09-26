@@ -35,6 +35,9 @@ export default function RecipDetail(props){
         }
     },[dispatch,id])
 
+    recipeDetail.length>0&&console.log('PASO A PASO', recipeDetail.steps.split('/n'))
+    const stepsDivided = recipeDetail.steps?.split('/n')
+
     return (
         <div>
             <NavBar/>
@@ -82,8 +85,20 @@ export default function RecipDetail(props){
             </div>
             
             <div className={s.steps}>
+            <span>Steps:<br /></span>
             {
-            recipeDetail.steps? <text>Steps:<br /> {recipeDetail.steps}</text> : <text>There is no steps associated yet</text> 
+            // recipeDetail.steps? <text>Steps:<br /> {recipeDetail.steps}</text> : <text>There is no steps associated yet</text> 
+            stepsDivided&&stepsDivided.length>0?
+            // <span>Steps:<br /></span>
+            stepsDivided.map(e=>{
+                return(
+                    <ul>
+                        <li>{e}</li>
+                    </ul>
+                )
+            })
+            :
+            <span>There is no steps associated yet</span>
             }
             </div>
             

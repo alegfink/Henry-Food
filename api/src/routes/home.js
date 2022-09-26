@@ -20,15 +20,7 @@ const postApiInfo = async ()=>{
         })
         
         asd = stepss?.join('<br />')
-        console.log(asd)
         
-        // let stepss = ''
-        // console.log('INSTRUCCIONES',el.analyzedInstructions)
-        // console.log('INSTRUCCIONESII',el.analyzedInstructions[0].steps)
-        // for (let i = 0; i < el.analyzedInstructions[0].steps.length; i++) {
-        //     stepss = stepss.concat(el.analyzedInstructions[0].steps[i].number)
-            
-        // }
         
         await Recipe.create({
             title: el.title,
@@ -109,17 +101,8 @@ router.post('/', async(req,res)=>{
 router.post('/', async(req,res)=>{
     const {title, id, summary, healthScore, steps, image, dishTypes, diets, results} = req.body
     
-    // const error = validatePost(req.body);
-    // if (error) return res.status(404).json("Falta enviar datos obligatorios")
     try{
-        // const receta = await Recipe.create({
-        //     title,
-        //     id,
-        //     summary,
-        //     healthScore,
-        //     steps,
-        //     image
-        // })
+        
         
          results.forEach(async el=>{
              Recipe.create({
@@ -133,12 +116,9 @@ router.post('/', async(req,res)=>{
         
         })
         
-        
-        // console.log(await validateExistDish())
-        // await validateExistDish()? await DishType.bulkCreate([
         // aca busco si hay algo creado de tipos de comida, en caso de que no, lo creo
         const dishh = await DishType.findAll()
-        // console.log (dishh)
+        
         dishh.length===0? await DishType.bulkCreate([   
             {"name": "side dish"},
             {"name": "lunch"},
@@ -166,7 +146,7 @@ router.post('/', async(req,res)=>{
             {"name": "snack"},
             {"name": "drink"}
         ]): null
-        // await validateExistDiet()? await Diet.bulkCreate([
+        
         // aca busco si hay algo creado de tipos de dietas, en caso de que no, lo creo
         const dietass = await Diet.findAll()
         dietass.length===0? await Diet.bulkCreate([
@@ -182,20 +162,6 @@ router.post('/', async(req,res)=>{
             {"name": "fodmap friendly"},
         ]): null
         
-        // const dish = await DishType.findAll({
-        //     where:{
-        //         name:{
-        //             [Op.in]:[`${dishTypes}`]
-        //         }
-        //     }
-        // })
-        // const dish = await DishType.findAll({
-        //     where:{
-        //         name:{
-        //             [Op.eq]:`${dishTypes}`
-        //         }
-        //     }
-        // })
         //aca guardo un arreglo con los dishtype
         results.forEach( async el=>{
             let dish = await DishType.findAll({
@@ -213,72 +179,6 @@ router.post('/', async(req,res)=>{
             await recett.setDiets(dieta)
         })
         
-        // // // const dish = await DishType.findAll({
-        // // //     where:{
-        // // //         name: dishTypes
-        // // //     }
-        // // // })
-        
-        // const dish = await dishTypes.map(async d=>{
-        //     await DishType.findAll({
-        //         where:{
-        //             name:{
-        //                 [Op.eq]:`${d}`}
-        //         }
-        //     })
-        // })
-        // console.log(dish)
-        //aca guardo un arreglo con las dietas
-        // // // // const dieta = await Diet.findAll({
-        // // // //     where:{
-        // // // //         name: diets
-        // // // //     }
-        // // // // })
-        // // // // // aca busco la receta
-        // // // // const recet = await Recipe.findByPk(id)
-        // // // // await recet.setDishTypes(dish)
-                
-        // // // // await recet.setDiets(dieta)
-        
-        // [
-        //     dishType {
-        //       dataValues: { id: 2, name: 'lunch' },
-        //       _previousDataValues: { id: 2, name: 'lunch' },
-        //       uniqno: 1,
-        //       _changed: Set(0) {},
-        //       _options: {
-        //         isNewRecord: false,
-        //         _schema: null,
-        //         _schemaDelimiter: '',
-        //         raw: true,
-        //         attributes: [Array]
-        //       },
-        //       isNewRecord: false
-        //     }
-        //   ]
-        
-        // const recetaCompleta = results.map( async el=>{ 
-        //     let asd = await Recipe.findAll({
-        //     where:{
-        //         id: el.id
-        //     },
-            // include: [
-                // {
-                //     model:Diet,
-                //     attributes:['name'],
-                //     through:{
-                //        attributes:[],
-                //     }
-                //    },
-                //    {
-                //    model:DishType,
-                //    attributes:['name'],
-                //     through:{
-                //        attributes:[],
-                //     }
-                // }
-            // ]
-        // });
         const recceta = await Recipe.findAll({
             include:[
                 {
@@ -300,7 +200,7 @@ router.post('/', async(req,res)=>{
         console.log(recceta)
         
         
-        // res.status(202).json('asd')
+        
         recceta? res.status(202).json(recceta): res.status(404).json('no se pudieron crear las recetas')
     }catch(err){
         res.status(404).json('error primer post')

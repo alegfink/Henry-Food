@@ -16,6 +16,8 @@ export const MIN_PAGE_NUMBER = 'MIN_PAGE_NUMBER';
 export const RESET_MAX_MIN = 'RESET_MAX_MIN;';
 export const RESET_PAGE = 'RESET_PAGE';
 export const FILTER_DONE = 'FILTER_DONE';
+export const RESET_SEARCH = 'RESET_SEARCH';
+export const SET_TITLE = 'SET_TITLE';
 
 //aca armo la ruta
 
@@ -118,11 +120,8 @@ export function searchByName(payload){
         });
         })
         .catch(err=>{
-          // dispatch({
-          //   type: SEARCH_BY_NAME,
-          //   payload: err.data
-          // })
-          alert('No recipe found')
+          // alert('No recipe found')
+          
         })
       }
 }
@@ -198,5 +197,16 @@ export function resetPage(){
 export function filterDone(){
   return{
     type: FILTER_DONE
+  }
+}
+export function resetSearch(){
+  return{
+    type:RESET_SEARCH
+  }
+}
+export function setTitle(payload){
+  return{
+    type: SET_TITLE,
+    payload
   }
 }

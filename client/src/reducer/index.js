@@ -1,4 +1,4 @@
-const { POST_INIT_RECIPES, RESET_PAGE, GET_ALL_RECIPES, GET_RECIPE_DETAIL,RESET_MAX_MIN, DELETE_DETAIL, FILTER_BY_DIET, FILTER_DONE, MAX_PAGE_NUMBER, MIN_PAGE_NUMBER, DELETE_FILTER, SAVE_PAGE, ORDER_BY_NAME, SEARCH_BY_NAME, POST_NEW_RECIPE, GET_ALL_DIETS, ORDER_BY_HEALTHSCORE} = require("../actions");
+const { POST_INIT_RECIPES, RESET_PAGE, RESET_SEARCH, SET_TITLE, GET_ALL_RECIPES, GET_RECIPE_DETAIL,RESET_MAX_MIN, DELETE_DETAIL, FILTER_BY_DIET, FILTER_DONE, MAX_PAGE_NUMBER, MIN_PAGE_NUMBER, DELETE_FILTER, SAVE_PAGE, ORDER_BY_NAME, SEARCH_BY_NAME, POST_NEW_RECIPE, GET_ALL_DIETS, ORDER_BY_HEALTHSCORE} = require("../actions");
 
 
 const initialState = {
@@ -13,6 +13,7 @@ const initialState = {
     maxPage:4,
     minPage:0,
     filter: true,
+    title:'',
 }
 
 function rootReducer (state = initialState, action){
@@ -99,8 +100,8 @@ function rootReducer (state = initialState, action){
         case SEARCH_BY_NAME:
             return{
                 ...state,
-                recipesSearch: action.payload?action.payload:null,
-                recipes: action.payload?action.payload:null
+                recipesSearch: action.payload&&action.payload,
+                recipes: action.payload&&action.payload
             }
         case POST_NEW_RECIPE:
             
@@ -145,6 +146,16 @@ function rootReducer (state = initialState, action){
             return {
                 ...state,
                 filter: state.filter? false: true
+            }
+        case RESET_SEARCH:
+            return{
+                ...state,
+                recipes:[]
+            }
+        case SET_TITLE:
+            return{
+                ...state,
+                title: action.payload
             }
         default:
             return state;

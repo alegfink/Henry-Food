@@ -14,7 +14,7 @@ export default function NavBar() {
                 <ul className={s.list}>
                     <li className={s.listitem}>
                         <NavLink className={s.navlink} exact to="/home" >Home</NavLink>
-                        <NavLink className={s.navlink} to="/form" >Crear Receta</NavLink>
+                        <NavLink className={s.navlink} to="/form" >Create Recipe</NavLink>
                     </li>
                 </ul>
             </nav>

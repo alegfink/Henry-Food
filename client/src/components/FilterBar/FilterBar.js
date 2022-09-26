@@ -47,7 +47,7 @@ export default function FilterBar(){
                     <option value='hi'>Higher</option>
                 </select>
                 <select className={s.select} onChange={e=>handleFilterDiet(e)}>
-                    <option value='All'>Todos</option>
+                    <option value='All'>All</option>
                     <option value='gluten free'>gluten free</option>
                     <option value='dairy free'>dairy free</option>
                     <option value='lacto ovo vegetarian'>lacto ovo vegetarian</option>

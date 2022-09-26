@@ -75,7 +75,7 @@ export default function Form(){
         
         if(!inputsError.some(inp=>errors.hasOwnProperty(inp))&&input.title.length>0){
             dispatch(postNewRecipe(input))
-            alert('Personaje creado mirey')
+            alert('Recipe created successfully')
             setInput({
                 title:'',
                 summary:'',
@@ -87,7 +87,7 @@ export default function Form(){
             history.push('/home')
         } else{
             
-            alert('completar campos obligatorios')
+            alert('Complete mandatory data')
         }
         
     }

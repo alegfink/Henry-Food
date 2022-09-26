@@ -18,7 +18,7 @@ export default function LandingPage(){
     return (
         <div className={s.landing}>
             <Link to = '/home'>
-                <button className={s.landingButton}><span>Hora de Cocinar..</span></button>
+                <button className={s.landingButton}><span>Let's start Cooking..</span></button>
             </Link>
         </div>
     )

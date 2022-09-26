@@ -39,15 +39,7 @@ router.get('/', async(req,res)=>{
     }
 })
 
-// [ ] Los campos mostrados en la ruta principal para cada receta (imagen, nombre, tipo de plato y tipo de dieta)
-// [ ] Resumen del plato
-// [ ] Nivel de "comida saludable" (health score)
-// [ ] Paso a paso
 
-// [ ] GET /recipes/{idReceta}:
-// Obtener el detalle de una receta en particular
-// Debe traer solo los datos pedidos en la ruta de detalle de receta
-// Incluir los tipos de dieta asociados
 router.get('/all', async(req, res)=>{
     try{
         const allRecet = await Recipe.findAll({
@@ -68,7 +60,7 @@ router.get('/all', async(req, res)=>{
                 }
             ]
         });
-        // console.log(allRecet)
+        
         allRecet && res.status(202).json(allRecet)
     }catch(err){
         res.status(404).json('error en el all')
@@ -100,20 +92,7 @@ router.get('/:id', async (req,res)=>{
             ]
         })
         
-        // const dietId = await RecipeDiet.findAll({
-        //     where:{
-        //         recipeId:id
-        //     }
-        // })
-        // const dieta = await Diet.findAll({
-        //     where:{
-        //         id: idDiet.dietId
-        //     }
-        // })
-        // console.log(receta)
-        // console.log(dietId)
         
-        // const recetaTotal = {receta, dieta}
     
 
         receta? res.status(202).send(...receta) : res.status(404).json('no se encontro receta por ese ID')
@@ -122,19 +101,6 @@ router.get('/:id', async (req,res)=>{
     }
 })
 
-// Ruta de creación de recetas: debe contener
-
-// [ ] Un formulario controlado con JavaScript con los siguientes campos:
-// Nombre
-// Resumen del plato
-// Nivel de "comida saludable" (health score)
-// Paso a paso
-// [ ] Posibilidad de seleccionar/agregar uno o más tipos de dietas
-// [ ] Botón/Opción para crear una nueva receta
-
-// [ ] POST /recipes:
-// Recibe los datos recolectados desde el formulario controlado de la ruta de creación de recetas por body
-// Crea una receta en la base de datos relacionada con sus tipos de dietas.
 
 let index = 0;
 router.post('/asd', async(req,res)=>{
@@ -146,10 +112,10 @@ router.post('/asd', async(req,res)=>{
         // aca genero un while preguntando si existe el id, en caso de que si, que sume 1 y vuelva a preguntar, hasta que no se repita
         while (x===1){
             const exist = await Recipe.findByPk(index)
-            // console.log (exist)
+            
             exist? index++ : x++
         }
-        // console.log('REQ BODY', req.body)
+        
         const titulo = title[0].toUpperCase()+title.slice(1)          
         const receta = await Recipe.create({
             title: titulo,
@@ -159,12 +125,7 @@ router.post('/asd', async(req,res)=>{
             image,
             id: index
         })
-        // const dieta = await Diet.findAll({
-        //     where:{
-        //         name: diets
-        //     }
-        // })    
-        // await receta.setDiets(dieta)
+        
         
         if (diets){
             const dieta = await Diet.findAll({
@@ -176,7 +137,7 @@ router.post('/asd', async(req,res)=>{
             console.log(recet)
             await recet.setDiets(dieta)
             }
-        return res.status(202).json('listo rey')
+        return res.status(202).json('Recipe created')
         
     }catch(err){
         res.status(404).json('error al postear el form')

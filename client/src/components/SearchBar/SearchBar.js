@@ -1,20 +1,20 @@
 import React from "react";
-import { useState } from "react";
-import { searchByName, resetMaxMin, resetPage } from "../../actions";
-import { useDispatch } from "react-redux";
+import { searchByName, resetMaxMin, resetPage,setTitle } from "../../actions";
+import { useDispatch, useSelector } from "react-redux";
 import s from './SearchBar.module.css'
 
-export default function SearchBar({setCurrentPage,setminPageNumberLimit,setmaxPageNumberLimit}){
+export default function SearchBar(){
 
     const dispatch = useDispatch()
+    const titulo = useSelector(state=>state.title)
     
-    const [title, setTitile] = useState('')
+    
     function handleInput(e){
         e.preventDefault()
         dispatch(resetMaxMin())
         dispatch(resetPage())
-        setTitile(e.target.value)
-        dispatch(searchByName(title))
+        dispatch(setTitle(e.target.value))
+        dispatch(searchByName(e.target.value))
         
         
     }
@@ -22,7 +22,7 @@ export default function SearchBar({setCurrentPage,setminPageNumberLimit,setmaxPa
     return (
         <div className={s.container}>
             
-            <input className={s.input} type='text' id='title' autoComplete='off' value={title} placeholder= "Search Recipe" onChange={e=>handleInput(e)}></input>
+            <input className={s.input} type='text' id='title' autoComplete='off' value={titulo} placeholder= "Search Recipe" onChange={e=>handleInput(e)}></input>
             
         </div>
     )
