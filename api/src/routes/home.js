@@ -19,8 +19,8 @@ const postApiInfo = async ()=>{
             return s.number.toString()+' '+s.step
         })
         
-        asd = stepss?.join('<br />')
-        
+        asd = stepss?.join('/n')
+        //<br />    
         
         await Recipe.create({
             title: el.title,
