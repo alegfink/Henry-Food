@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link, useHistory} from 'react-router-dom';
+import { useHistory} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { postNewRecipe, getAllDiets } from '../../actions';
@@ -8,9 +8,7 @@ import s from './Form.module.css';
 // import { validate } from './Errors.js';
 
 export default function Form(){
-
-    
-
+  
     const dispatch = useDispatch()
     const dietss = useSelector(state=>state?.allDiets)
     const history = useHistory()
@@ -36,15 +34,11 @@ export default function Form(){
         if (!input.title) {
           errors.title = 'Title is required';
         }
-        //  else if (!/\S+@\S+\.\S+/.test(input.title)) {
-        //   errors.title = 'Title is invalid';
-        // }
+        
         if (!input.summary) {
           errors.summary = 'Summary is required';
         }
-        //  else if (!/\d/.test(input.password)) {
-        //   errors.summary = 'Summary is invalid';
-        // }
+        
         if (!input.healthScore) {
           errors.healthScore = 'HealtScore is required';
         } 
@@ -55,19 +49,12 @@ export default function Form(){
           errors.steps = 'Steps is required';
           
         }
-        // if(input.image.slice(-4)!=='.jpg'||input.image.slice(-4)!=='.png'){
-        //     errors.image = 'URL invalid'
-        // if(input.image.slice(0,10)!=='data:image'){
-        //     errors.image = 'URL invalid'
-        // }
+        
         if (input.image.includes('?url=http')||input.image.length>=255){
             
             errors.image = 'URL invalid'
         }
         
-        //  else if (!/\S+@\S+\.\S+/.test(input.title)) {
-        //   errors.steps = 'Steps is invalid';
-        // }
         return errors;
       };
 
@@ -99,9 +86,7 @@ export default function Form(){
                 })
             history.push('/home')
         } else{
-            // console.log('INPUTS', inputs)
-            // console.log('ERROR', errors)
-            // console.log('MENSAJE ERROR', inputs.some(inp=>errors.hasOwnProperty(inp) ))
+            
             alert('completar campos obligatorios')
         }
         
@@ -128,7 +113,7 @@ export default function Form(){
         })
     }
 
-    // let grid = 0
+    
 
     return(
         <div>
@@ -160,12 +145,7 @@ export default function Form(){
               <textarea className={s.textarea} type='text' name='steps' cols="50" rows="5" value={input.name} placeholder='Steps...' onChange={e=>handleChange(e)}></textarea>
               </div>
                 {errors.steps && <span className={s.error}>{errors.steps}</span>}
-              </div>
-                
-                
-                
-                {/* <label >Dietas</label> */}
-                
+              </div>             
                 
               
             <div>
@@ -185,16 +165,14 @@ export default function Form(){
                     <span>Selected Diets: {input.diets.map(el=>el + ' ,')}</span>
                 </div>
                 </div>
-                
-                
                 :<span className={s.error}>No diet was selected</span>
             }
             <div className={s.deleteDiet}>
             {input.diets.map(el=>{
-                //grid++; className={`${s.gridDelete}${grid}`}
+                
                 return (
                 <div >  
-                    <a className={s.dietToDelete}>{el}</a>
+                    <span className={s.dietToDelete}>{el}</span>
                     <button className={s.button} onClick={e=>handleDelete(el)}>x</button>
                 </div>
 

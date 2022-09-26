@@ -1,40 +1,38 @@
 import React from "react";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { filterRecipsByDiet, orderByName, orderByHealthScore } from "../../actions";
+import { useDispatch } from "react-redux";
+import { filterRecipsByDiet, orderByName, orderByHealthScore, resetMaxMin, resetPage, deleteFilter, filterDone } from "../../actions";
 import s from './FilterBar.module.css';
 
-export default function FilterBar({handleFilterDiet,handleOrderByHealthScore,handleOrderByName}){
+export default function FilterBar(){
 
-    // const dispatch = useDispatch()
+    const dispatch = useDispatch()
 
-    // const recipess = useSelector(state=>state.recipes)
+    const handleFilterDiet=(e)=>{
+        e.preventDefault()
+        dispatch (resetMaxMin())
+        dispatch (resetPage())
+        dispatch(deleteFilter())
+        dispatch(filterRecipsByDiet(e.target.value))
+                
+    }
 
-    // let [currentPage, setCurrentPage] = useState(1)
-    // let [order, setOrder] = useState('')
-
-    // function handleFilterDiet(e){
-    //     e.preventDefault()
-    //     dispatch(filterRecipsByDiet(e.target.value))
-    // }
-
-    // function handleOrderByName(e){
-    //     e.preventDefault()
+    function handleOrderByName(e){
+        e.preventDefault()
+        dispatch(resetMaxMin())
+        dispatch(resetPage())
+        dispatch(orderByName(e.target.value))
+        dispatch(filterDone())
         
-    //     dispatch(orderByName(e.target.value))
-        
-    //     setCurrentPage(1)
-    //     setOrder(`Ordenado: ${e.target.value}`)
-    // }
+    }
 
-    // function handleOrderByHealthScore(e){
-    //     e.preventDefault()
-    //     console.log('SOY RECIPES', recipess)
-    //     dispatch(orderByHealthScore(e.target.value))
-        
-    //     setCurrentPage(1)
-    //     setOrder(`Ordenado: ${e.target.value}`)
-    // }
+    function handleOrderByHealthScore(e){
+        e.preventDefault()
+        dispatch(resetMaxMin())
+        dispatch(resetPage())
+        dispatch(orderByHealthScore(e.target.value))
+        dispatch(filterDone())
+
+    }
 
 
     return(

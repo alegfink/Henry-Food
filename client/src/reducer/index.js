@@ -1,4 +1,4 @@
-const { POST_INIT_RECIPES, GET_ALL_RECIPES, GET_RECIPE_DETAIL, DELETE_DETAIL, FILTER_BY_DIET, DELETE_FILTER, SAVE_PAGE, ORDER_BY_NAME, SEARCH_BY_NAME, POST_NEW_RECIPE, GET_ALL_DIETS, ORDER_BY_HEALTHSCORE } = require("../actions");
+const { POST_INIT_RECIPES, RESET_PAGE, GET_ALL_RECIPES, GET_RECIPE_DETAIL,RESET_MAX_MIN, DELETE_DETAIL, FILTER_BY_DIET, FILTER_DONE, MAX_PAGE_NUMBER, MIN_PAGE_NUMBER, DELETE_FILTER, SAVE_PAGE, ORDER_BY_NAME, SEARCH_BY_NAME, POST_NEW_RECIPE, GET_ALL_DIETS, ORDER_BY_HEALTHSCORE} = require("../actions");
 
 
 const initialState = {
@@ -9,8 +9,10 @@ const initialState = {
     allRecipes: [],
     recipesSearch:[],
     allDiets:[],
-    recordedPage:[],
-
+    recordedPage:1,
+    maxPage:4,
+    minPage:0,
+    filter: true,
 }
 
 function rootReducer (state = initialState, action){
@@ -23,25 +25,24 @@ function rootReducer (state = initialState, action){
         case GET_ALL_RECIPES:
             return{
                 ...state,
-                recipes: action.payload,
+                // recipes: action.payload,
                 allRecipes: action.payload
             };
         case GET_RECIPE_DETAIL:
-            // console.log('ENTRA AL REDUCER', action.payload)  
+            
             return{
                 ...state,
                 recipeDetail: action.payload
             }
         case DELETE_DETAIL:
-            console.log('ENTRA AL REDUCER')
+            
             return{
                 ...state,
                 recipeDetail:{}
             }
         case FILTER_BY_DIET:
             const allRecipe = state.allRecipes
-            console.log('ACTION',action.payload)
-            console.log('ALLRECIP', allRecipe)
+            
             let dietFiltered = action.payload === 'All'? allRecipe : allRecipe.filter(el=>{
                 const asd = el.diets.filter(el=>el.name===action.payload)
                 if(asd.length>0){
@@ -49,31 +50,18 @@ function rootReducer (state = initialState, action){
                 }
                 return false
                 })
-            console.log('DIETASFILT', dietFiltered)
-                
-                    // for (let clave in el.diets){
-                    //     console.log("CLAVE", clave)
-                    //     console.log('USUARIO', el[clave])
-                    // }
-                
-                // console.log("DIETAS",el.diets)
-                // el.diets.includes({
-                //     "name": "gluten free"})
-                // el.id === 636608
-                
-                // console.log('PRUEBA', el.diets.includes('lacto ovo vegetarian'))
-            // })
             
             return{
                 ...state,
                 recipes: dietFiltered
             }
-        case DELETE_FILTER: // para resetear el filtro cuando actualiza
+        case DELETE_FILTER:
             return{
                 ...state,
                 dietFiltered: []
             }
         case ORDER_BY_NAME:
+            
             let arrayOrd = action.payload === 'asc' ?
                 state.recipes.sort((a,b)=>{
                     if (a.title>b.title) return 1
@@ -85,10 +73,11 @@ function rootReducer (state = initialState, action){
                     if (b.title>a.title) return 1
                     return 0
                 })
-                console.log('SOY EL ARRAY',arrayOrd)
+                
             return{
                 ...state,
-                recipes: arrayOrd
+                recipes: arrayOrd,
+                
             }
         case ORDER_BY_HEALTHSCORE:
             let arrayLowHigh = action.payload === 'low'?
@@ -104,16 +93,17 @@ function rootReducer (state = initialState, action){
                 })
             return{
                 ...state,
-                recipes: arrayLowHigh
+                recipes: arrayLowHigh,
+                
             }
         case SEARCH_BY_NAME:
             return{
                 ...state,
-                recipesSearch: action.payload,
-                recipes: action.payload
+                recipesSearch: action.payload?action.payload:null,
+                recipes: action.payload?action.payload:null
             }
         case POST_NEW_RECIPE:
-            // console.log('SOY EL REDUCER', action.payload)
+            
             return{
                 ...state
             }
@@ -124,10 +114,37 @@ function rootReducer (state = initialState, action){
                 allDiets: action.payload
             }
         case SAVE_PAGE:
-            console.log('ENTRA AL SAVE')
+            
             return{
                 ...state,
                 recordedPage: action.payload
+            }
+        case MAX_PAGE_NUMBER:
+            return {
+                ...state,
+                maxPage: state.maxPage + action.payload
+            }
+        case MIN_PAGE_NUMBER:
+            return {
+                ...state,
+                minPage: state.minPage + action.payload
+            }
+        case RESET_MAX_MIN:
+            
+            return{
+                ...state,
+                maxPage:4,
+                minPage:0
+            }
+        case RESET_PAGE:
+            return{
+                ...state,
+                recordedPage:1
+            }
+        case FILTER_DONE:
+            return {
+                ...state,
+                filter: state.filter? false: true
             }
         default:
             return state;

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import { postInitRecipes } from '../../actions';
 import s from './LandingPage.module.css';
 
@@ -9,11 +9,11 @@ import s from './LandingPage.module.css';
 export default function LandingPage(){
 
     const dispatch = useDispatch()
-    // const allRecipes = useSelector (state => state.recipes)
+    
 
     useEffect(()=>{
         dispatch(postInitRecipes());
-    },[])
+    },[dispatch])
 
     return (
         <div className={s.landing}>

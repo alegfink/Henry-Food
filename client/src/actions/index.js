@@ -11,6 +11,11 @@ export const POST_NEW_RECIPE = 'POST_NEW_RECIPE';
 export const GET_ALL_DIETS = 'GET_ALL_DIETS';
 export const ORDER_BY_HEALTHSCORE = 'ORDER_BY_HEALTHSCORE';
 export const SAVE_PAGE = 'SAVE_PAGE';
+export const MAX_PAGE_NUMBER = 'MAX_PAGE_NUMBER';
+export const MIN_PAGE_NUMBER = 'MIN_PAGE_NUMBER';
+export const RESET_MAX_MIN = 'RESET_MAX_MIN;';
+export const RESET_PAGE = 'RESET_PAGE';
+export const FILTER_DONE = 'FILTER_DONE';
 
 //aca armo la ruta
 
@@ -113,10 +118,11 @@ export function searchByName(payload){
         });
         })
         .catch(err=>{
-          dispatch({
-            type: SEARCH_BY_NAME,
-            payload: err.data
-          })
+          // dispatch({
+          //   type: SEARCH_BY_NAME,
+          //   payload: err.data
+          // })
+          alert('No recipe found')
         })
       }
 }
@@ -161,5 +167,36 @@ export function savePage(payload){
   return{
     type: SAVE_PAGE,
     payload
+  }
+}
+
+export function maxPageNumber(payload){
+  return{
+    type: MAX_PAGE_NUMBER,
+    payload
+  }
+}
+
+export function minPageNumber(payload){
+  return {
+    type: MIN_PAGE_NUMBER,
+    payload
+  }
+}
+
+export function resetMaxMin(){
+  return{
+    type: RESET_MAX_MIN
+  }
+}
+
+export function resetPage(){
+  return{
+    type:RESET_PAGE
+  }
+}
+export function filterDone(){
+  return{
+    type: FILTER_DONE
   }
 }
