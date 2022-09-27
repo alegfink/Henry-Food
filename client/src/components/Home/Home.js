@@ -72,7 +72,7 @@ export default function Home(){
                 )
                 :
                 <div>
-            {allRecipes &&
+            {allRecipes.length>0 &&
             <Paginado
             recipesPerPage = {recipesPerPage}
             allRecipes = {allRecipes.length>0?allRecipes.length:allRecipes2.length}

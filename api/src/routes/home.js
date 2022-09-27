@@ -5,8 +5,10 @@ const { Op, Recipe, Diet, DishType, RecipeDiet, RecipeDish } = require('../db.js
 const { route } = require('./diet.js');
 const router = Router();
 const {validatePost, validateExistDish, validateExistDiet, indexExist} = require('./util')
+const {
+    API_KEY
+  } = process.env;
 
-const API_KEY = '9b8239a921084a88a38274901fbc9daf'
 
 const postApiInfo = async ()=>{
     
