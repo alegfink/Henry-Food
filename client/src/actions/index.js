@@ -120,10 +120,12 @@ export function searchByName(payload){
         });
         })
         .catch(err=>{
-          // alert('No recipe found')
-          
+          dispatch({ 
+            type: POST_NEW_RECIPE, 
+            payload: err.response.data,
         })
-      }
+      })
+    }
 }
 
 export function postNewRecipe (payload){
@@ -138,7 +140,7 @@ export function postNewRecipe (payload){
       .catch(err=>{
         dispatch({ 
           type: POST_NEW_RECIPE, 
-          payload: err.data,
+          payload: err.response.data,
       })
       })
   } 

@@ -14,6 +14,7 @@ const initialState = {
     minPage:0,
     filter: true,
     title:'',
+    
 }
 
 function rootReducer (state = initialState, action){
@@ -45,7 +46,9 @@ function rootReducer (state = initialState, action){
             const allRecipe = state.allRecipes
             
             let dietFiltered = action.payload === 'All'? allRecipe : allRecipe.filter(el=>{
+                console.log('ALL RECIPES', allRecipe)
                 const asd = el.diets.filter(el=>el.name===action.payload)
+                console.log('ASD', asd)
                 if(asd.length>0){
                     return true
                 }
@@ -104,9 +107,8 @@ function rootReducer (state = initialState, action){
                 recipes: action.payload&&action.payload
             }
         case POST_NEW_RECIPE:
-            
             return{
-                ...state
+                ...state,
             }
         case GET_ALL_DIETS:
             

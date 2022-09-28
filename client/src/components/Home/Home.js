@@ -16,7 +16,7 @@ export default function Home(){
     const gif = 'https://media2.giphy.com/media/HeMju6ptLhZ7XCA4vH/giphy.gif?cid=790b7611adf768434dfa5bd572ec4332d478fca69a7bf862&rid=giphy.gif&ct=s'
     const allRecipes = useSelector (state=>state.recipes)
     const allRecipes2 = useSelector (state=>state?.allRecipes)
-    // const titleSearch = useSelector (state=>state?.recipesSearch)
+    
     
     const [loadingg, setLoadingg] = useState(false)
     
@@ -25,7 +25,8 @@ export default function Home(){
     
 
     useEffect(()=>{
-        allRecipes.length===0&&dispatch(getAllRecipes())
+        // allRecipes.length===0&&dispatch(getAllRecipes())
+        dispatch(getAllRecipes())
         setTimeout( ()=>{
             setLoadingg(true) 
         }, 1000)
@@ -44,11 +45,7 @@ export default function Home(){
     const indexOfLastRecipe = actualPage * recipesPerPage
     const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage
     const currentRecipes = allRecipes.length>0?allRecipes.slice(indexOfFirstRecipe, indexOfLastRecipe):allRecipes2.slice(indexOfFirstRecipe, indexOfLastRecipe)
-    // const [title, setTitile] = useState('')
-
-    // const [loading, setLoading] = useState(true);
-    // const [maxPageNumberLimit, setmaxPageNumberLimit]= useState(4);
-    // const [minPageNumberLimit, setminPageNumberLimit]= useState(0);
+    
 
     return (
         <div>

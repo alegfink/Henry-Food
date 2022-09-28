@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { postNewRecipe, getAllDiets } from '../../actions';
+import { postNewRecipe, getAllDiets, getAllRecipes } from '../../actions';
 import NavBar from '../NavBar/NavBar';
 import s from './Form.module.css';
 // import { validate } from './Errors.js';
@@ -13,9 +13,12 @@ export default function Form(){
     const dietss = useSelector(state=>state?.allDiets)
     const history = useHistory()
     const [errors, seterrors] = useState('')
+    const nameRepeated = useSelector(state=>state?.repeatName)
+    const allRecip = useSelector(state=>state.allRecipes)
 
     useEffect(()=>{
         dispatch(getAllDiets())
+        dispatch(getAllRecipes())
     },[dispatch])
 
     const [input, setInput] = useState({
@@ -31,10 +34,14 @@ export default function Form(){
 
     function validate(input) {
         let errors = {};
+        
+        const as = allRecip.map(el=>{
+            if(el.title===input.title[0].toUpperCase()+input.title.slice(1)) return true})
+            const aa = as.includes(true)
         if (!input.title) {
           errors.title = 'Title is required';
         }
-        
+        else if(aa){errors.title = 'Title allready exist'};
         if (!input.summary) {
           errors.summary = 'Summary is required';
         }
@@ -72,25 +79,27 @@ export default function Form(){
 
     function handleSubmit(e){
         e.preventDefault()
-        
         if(!inputsError.some(inp=>errors.hasOwnProperty(inp))&&input.title.length>0){
-            dispatch(postNewRecipe(input))
-            alert('Recipe created successfully')
-            setInput({
-                title:'',
-                summary:'',
-                healthScore:'',
-                steps:'',
-                diets:[],
-                image: ''
-                })
-            history.push('/home')
-        } else{
-            
-            alert('Complete mandatory data')
-        }
-        
-    }
+                dispatch(postNewRecipe(input))
+                console.log('NOMBREREP', nameRepeated)
+                if(!nameRepeated){
+                    alert('Recipe created successfully')
+                    setInput({
+                    title:'',
+                    summary:'',
+                    healthScore:'',
+                    steps:'',
+                    diets:[],
+                    image: ''
+                    })
+                    history.push('/home')
+                } else alert('name repeated')
+            } else{
+                
+                alert('Complete mandatory data')
+            }
+        } 
+    
 
     function handleSelect(e){
         e.preventDefault()
